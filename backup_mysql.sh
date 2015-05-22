@@ -13,10 +13,15 @@ do
 	
 	curr_date=`date +%Y-%m-%d`
 	name="mysql-$db_name-$curr_date.xz"
-	`mysqldump --host=$MYSQL_HOST -P $MYSQL_PORT --user=$MYSQL_USER --password=$MYSQL_PASSWORD $db_name | xz > $name`
-	`$GS_UTIL_BINARY_PATH cp $name $GS_WEEKLY_BUCKET/mysql/$curr_date/$name`
+	
+	log_contents=`mysqldump --host=$MYSQL_HOST -P $MYSQL_PORT --user=$MYSQL_USER --password=$MYSQL_PASSWORD $db_name | xz > $name 2>&1`
+	log 'INFO' $log_tag "mysqldump log: $log_contents"
+	
+	log_contents=`$GS_UTIL_BINARY_PATH cp $name $GS_WEEKLY_BUCKET/mysql/$curr_date/$name 2>&1`
+	log 'INFO' $log_tag "gs_util log: $log_contents"
 	if [[ date_day -eq 1 ]]; then
-		`$GS_UTIL_BINARY_PATH cp $GS_WEEKLY_BUCKET/mysql/$curr_date/$name $GS_MONTHLY_BUCKET/mysql/$name`
+		log_contents=`$GS_UTIL_BINARY_PATH cp $GS_WEEKLY_BUCKET/mysql/$curr_date/$name $GS_MONTHLY_BUCKET/mysql/$name 2>&1`
+		log 'INFO' $log_tag "gs_util log: $log_contents"
 	fi
 	rm -f "$name"
 done

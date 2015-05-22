@@ -31,12 +31,15 @@ for dir_name in `ls -d $WWW_ROOT/*/`; do
 			filename="./$name.tar.xz"
 
 			log 'INFO' $log_tag "Compressing $name"
-			`tar --create --xz --file=$filename $WWW_EXCLUDES --listed-incremental=$incremental_file $dir_name`
+			log_contents=`tar --create --xz --file=$filename $WWW_EXCLUDES --listed-incremental=$incremental_file $dir_name 2>&1`
+			log 'INFO' $log_tag "tar log: $log_contents"
 			
-			`$GS_UTIL_BINARY_PATH cp $filename $GS_WEEKLY_BUCKET/files/$curr_date/$name.tar.xz`
+			log_contents=`$GS_UTIL_BINARY_PATH cp $filename $GS_WEEKLY_BUCKET/files/$curr_date/$name.tar.xz 2>&1`
+			log 'INFO' $log_tag "gs_util log: $log_contents"
 			
 			if [[ is_first_monday -eq 1 ]]; then
-				`$GS_UTIL_BINARY_PATH cp $GS_WEEKLY_BUCKET/files/$curr_date/$name.tar.xz $GS_MONTHLY_BUCKET/files/$name.tar.xz`
+				log_contents=`$GS_UTIL_BINARY_PATH cp $GS_WEEKLY_BUCKET/files/$curr_date/$name.tar.xz $GS_MONTHLY_BUCKET/files/$name.tar.xz 2>&1`
+				log 'INFO' $log_tag "gs_util log: $log_contents"
 			fi
 			
 			rm -f "$filename"
