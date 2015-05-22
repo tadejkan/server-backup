@@ -10,57 +10,71 @@ Creates monthly full backups of DBs and files (on first Monday of the month).
 
 Because I needed a backup solution for my servers, but couldn't find one that would suite me.
 
-## Requirements
+## Prerequisites
 
-- ```xz``` installed on your machine (for compressing data)
+- ```xz``` command installed on your machine (for compressing data).
 
-- ```mysqldump``` and ```pg_dump``` installed if you wish to backup MySQL and PostgreSQL
+- ```mysqldump``` and ```pg_dump``` commands installed if you wish to backup MySQL and PostgreSQL.
 
-- setup Google Cloud Storage with one project created, for backuping purposes
+- Setup Google Cloud Storage with one project created, for backuping purposes.
 
 ## Installation
 
-1. create a folder somewhere on your server (e.g., ```/root/backups/```) and copy these files into it
+1. Create a folder somewhere on your server (e.g., ```/root/backups/```) and upload files from Git into it. You can do so either manually by downloading files to your computer and uploading them, or you can do it by running these commands:
+	```
+	$ wget https://github.com/tadejkan/server-backup/archive/master.zip
+	$ unzip master
+	```
 
-2. make backup files executable by running
+2. Make backup files executable by running
 
 	```
 	$ chmod +x backup*.sh create_bucket.sh
 	```
 
-3. download ```gsutil``` and extract it (it should be in ```gsutil``` subdir, so that calling it from your backups directory is ```gsutil/gsutil```) in your backups directory
+3. Download Google's ```gsutil```, install it and configure it, following instructions at https://cloud.google.com/storage/docs/gsutil_install (you'll need a Google Cloud account with at least one project).
+	
+	You can also install it by simply extracting it into a directory (and configuring it, by calling ```gsutil config```, of course).
+	
+	**Note: by default, backup scripts search for ```gsutil``` as being in ```gsutil``` folder, directly under backup folder (e.g., ```/root/backups/```).**
+	
+	**If you didn't install it this way, then please modify ```GS_UTIL_BINARY_PATH``` in ```constants.sh```.**
+	
+4. Edit ```constants.sh``` and change info to match your environment.
+	
+	At the very least, you have to change ```GS_MONTHLY_BUCKET``` and ```GS_WEEKLY_BUCKET``` variables.
+	
+	According to Google, these have to be unique, not just for your account, but globally as well. See https://cloud.google.com/storage/docs/bucket-naming#requirements for more information.
+	
+5. Run ```./create_bucket.sh``` to create appropriate buckets.
 
-4. setup ```gsutil``` as you like (following Google's instructions on how to do it)
+6. Add this line to your CRON (change backups folder if necessary):
 
-5. edit ```constants.sh``` and change info to match your environment
+	```0 1 * * * cd /root/backups/ && ./backup_postgres.sh && ./backup_mysql.sh && ./backup_sites.sh```
+	
+	If you only want to backup certain things, simply remove the rest. For example, if you only wanted to backup MySQL, your CRON would look like this:
+	
+	```0 1 * * * cd /root/backups/ && ./backup_mysql.sh```
 
-5. run ```./create_bucket.sh``` to create appropriate buckets
-
-6. modify ```backup_postgres``` and ```backup_mysql``` with your passwords/hosts/ports
-
-7. add this line to your CRON (modify if necessary):
-
-	```0 1 * * * cd /root/backups/ && ./backup_postgres.sh && ./backup_mysql.sh && ./backup.sh```
-
-8. that's it; wait a few days and verify everything's still working (uploads showing up on Google Cloud Storage)
+7. That's it; wait a few days and verify everything's still working (uploads showing up on Google Cloud Storage).
 
 ## Restoring
 
 ### DB
 
-1. download newest backups of DBs you want to restore
+1. Download newest backups of DBs you want to restore.
 
-2. extract somewhere
+2. Extract somewhere.
 
-3. use appropriate commands (```mysql``` or ```pg_restore```) to restore DB from extracted backup
+3. Use appropriate commands (```mysql``` or ```pg_restore```) to restore DB from extracted backup.
 
 ### Files
 
-1. download newest full backups
+1. Download newest full backups.
 
-2. download all non-full (incremental) backups newer than full backups
+2. Download all non-full (incremental) backups newer than full backups.
 
-3. use this command to extract full backup
+3. Use this command to extract full backup
 
 	(you can add ```--strip-components NUMBER``` if you want to extract to a different folder than the one it was backed up from)
 	
@@ -68,7 +82,7 @@ Because I needed a backup solution for my servers, but couldn't find one that wo
 	$ tar -xpf backup_name-full.tar.xz
 	```
 
-4. use this command on every incremental backup to restore it (commands must be executed on incremental backups in the correct order - by date, ascending)
+4. Use this command on every incremental backup to restore it (commands must be executed on incremental backups in the correct order - by date, ascending)
 
 	(you can add ```--strip-components NUMBER``` if you want to extract to a different folder than the one it was backed up from)
 	
