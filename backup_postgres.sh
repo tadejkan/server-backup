@@ -16,9 +16,9 @@ do
 	curr_date=`date +%Y-%m-%d`
 	name="postgres-$db_name-$curr_date.xz"
 	`pg_dump --host $POSTGRES_HOST --port $POSTGRES_PORT --username $POSTGRES_USER -w --format plain $db_name | xz > $name`
-	`gsutil/gsutil cp $name $GS_WEEKLY_BUCKET/postgres/$curr_date/$name`
+	`$GS_UTIL_BINARY_PATH cp $name $GS_WEEKLY_BUCKET/postgres/$curr_date/$name`
 	if [[ date_day -eq 1 ]]; then
-		`gsutil/gsutil cp $GS_WEEKLY_BUCKET/postgres/$curr_date/$name $GS_MONTHLY_BUCKET/postgres/$name`
+		`$GS_UTIL_BINARY_PATH cp $GS_WEEKLY_BUCKET/postgres/$curr_date/$name $GS_MONTHLY_BUCKET/postgres/$name`
 	fi
 	rm -f "$name"
 done
