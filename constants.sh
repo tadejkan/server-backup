@@ -25,3 +25,8 @@ POSTGRES_HOST="localhost"
 POSTGRES_PORT="5432"
 POSTGRES_USER="postgres"
 POSTGRES_PASSWORD="YOUR-PASSWORD"
+
+log() {
+	date_str=`date`
+	logger -s -t $2 "[$date_str]" "[$1]" $3
+}

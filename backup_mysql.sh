@@ -4,11 +4,12 @@ DIR="${BASH_SOURCE%/*}"
 if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
 . "$DIR/constants.sh"
 
-date_str=`date`
+log_tag='backup_mysql'
+
 date_day=`date +%d`
 for db_name in `mysql --host=$MYSQL_HOST -P $MYSQL_PORT --user=$MYSQL_USER --password=$MYSQL_PASSWORD -rBN -e "SHOW DATABASES WHERE \\\`Database\\\` NOT IN ('information_schema', 'performance_schema', 'mysql')"`
 do
-	echo "[$date_str] Dumping $db_name" >> log.txt
+	log 'INFO' $log_tag "Dumping $db_name"
 	
 	curr_date=`date +%Y-%m-%d`
 	name="mysql-$db_name-$curr_date.xz"

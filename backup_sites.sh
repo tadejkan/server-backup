@@ -4,7 +4,8 @@ DIR="${BASH_SOURCE%/*}"
 if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
 . "$DIR/constants.sh"
 
-date_str=`date`
+log_tag='backup_sites'
+
 if [ `date +%u` -eq 1 ]; then is_monday=1; else is_monday=0; fi;
 if [ is_monday -a `date +%e` -lt " 8" ]; then is_first_monday=1; else is_first_monday=0; fi;
 for dir_name in `ls -d $WWW_ROOT/*/`; do
@@ -12,7 +13,7 @@ for dir_name in `ls -d $WWW_ROOT/*/`; do
 		space_available=`df -k ./ | tail -1 | awk '{print $4}'`
 		size=`du -s "$dir_name" | cut -f1`
 		if [[ size -gt space_available ]]; then
-			echo "[$date_str] Too large: $dir_name" >> log.txt
+			log 'WARNING' $log_tag "Too large: $dir_name"
 		else
 			name=$(basename "$dir_name")
 			incremental_file="./incrementals/$name.snar" #name should be without date
@@ -29,9 +30,8 @@ for dir_name in `ls -d $WWW_ROOT/*/`; do
 			
 			filename="./$name.tar.xz"
 
-			echo "[$date_str] Compressing $name" >> log.txt
+			log 'INFO' $log_tag "Compressing $name"
 			`tar --create --xz --file=$filename $WWW_EXCLUDES --listed-incremental=$incremental_file $dir_name`
-			ls -lh | grep "$name" >> log.txt
 			
 			`$GS_UTIL_BINARY_PATH cp $filename $GS_WEEKLY_BUCKET/files/$curr_date/$name.tar.xz`
 			
