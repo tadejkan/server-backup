@@ -47,6 +47,10 @@ Because I needed a backup solution for my servers, but couldn't find one that wo
 	According to Google, these have to be unique, not just for your account, but globally as well. See https://cloud.google.com/storage/docs/bucket-naming#requirements for more information.
 	
 5. Run ```./create_bucket.sh``` to create appropriate buckets.
+	
+	Two 404 errors are expected to be displayed, because the script checks for weekly and monthly bucket existence.
+	
+	If there are any other errors, please resolve them before continuing.
 
 6. Add this line to your CRON (change backups folder if necessary):
 
