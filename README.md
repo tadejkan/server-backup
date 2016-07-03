@@ -23,7 +23,8 @@ Because I needed a backup solution for my servers, but couldn't find one that wo
 1. Create a folder somewhere on your server (e.g., ```/root/backups/```) and upload files from Git into it. You can do so either manually by downloading files to your computer and uploading them, or you can do it by running these commands:
 	```
 	$ wget https://github.com/tadejkan/server-backup/archive/master.zip
-	$ unzip master
+	$ unzip master.zip
+	$ mv server-backup-master backups
 	```
 
 2. Make backup files executable by running
