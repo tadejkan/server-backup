@@ -27,7 +27,7 @@ Because I needed a backup solution for my servers, but couldn't find one that wo
 	$ mv server-backup-master backups
 	```
 
-2. Make backup files executable by running
+2. Make backup files executable by opening your backups folder (e.g., ```/root/backups/```) and running
 
 	```
 	$ chmod +x backup*.sh create_bucket.sh
@@ -47,7 +47,7 @@ Because I needed a backup solution for my servers, but couldn't find one that wo
 	$ cd /root/backups/
 	$ wget https://storage.googleapis.com/pub/gsutil.zip
 	$ unzip gsutil.zip
-	$ cd /root/backups/gsutil & ./gsutil config
+	$ cd /root/backups/gsutil && ./gsutil config
 	```  
 	
 4. Edit ```constants.sh``` and change info to match your environment.
