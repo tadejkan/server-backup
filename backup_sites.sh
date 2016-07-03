@@ -7,7 +7,7 @@ if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
 log_tag='backup_sites'
 
 if [ `date +%u` -eq 1 ]; then is_monday=1; else is_monday=0; fi;
-if [ is_monday -eq 1 -a `date +%e` -lt " 8" ]; then is_first_monday=1; else is_first_monday=0; fi;
+if [[ is_monday -eq 1 && `date +%e` -lt " 8" ]]; then is_first_monday=1; else is_first_monday=0; fi;
 for dir_name in `ls -d $WWW_ROOT/*/`; do
 	if [ ! -z "$dir_name" ]; then
 		space_available=`df -k ./ | tail -1 | awk '{print $4}'`
