@@ -64,7 +64,7 @@ Because I needed a backup solution for my servers, but couldn't find one that wo
 
 6. Add this line to your CRON (change backups folder if necessary):
 
-	```0 1 * * * cd /root/backups/ && ./backup_postgres.sh && ./backup_mysql.sh && ./backup_sites.sh```
+	```0 1 * * * cd /root/backups/ && ./backup_postgres.sh && ./backup_mysql.sh && ./backup_sites.sh && ./backup_gogs.sh```
 	
 	If you only want to backup certain things, simply remove the rest. For example, if you only wanted to backup MySQL, your CRON would look like this:
 	
