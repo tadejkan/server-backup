@@ -1,4 +1,4 @@
-# Backup for servers using Google Cloud Storage (Nearline)
+# Backup for servers using Google Cloud Storage (Coldline)
 
 Creates a daily (full) backup of DBs.
 
