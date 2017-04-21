@@ -116,7 +116,7 @@ Because I needed a backup solution for my servers, but couldn't find one that wo
 
 	**Warning: the script must not run multiple times a day, without changing the naming scheme, because it currently relies on date being unique; otherwise it'll overwrite existing files.**
 
-##Author
+## Author
 - Email: tadej@ncode.si
 - GitHub: https://github.com/tadejkan
 
