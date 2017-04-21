@@ -6,7 +6,7 @@
      "type": "Delete"
     },
     "condition": {
-     "age": 90,
+     "age": 180,
      "isLive": true
     }
    },
