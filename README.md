@@ -58,9 +58,7 @@ Because I needed a backup solution for my servers, but couldn't find one that wo
 	
 5. Run ```./create_bucket.sh``` to create appropriate buckets.
 	
-	Two 404 errors are expected to be displayed, because the script checks for weekly and monthly bucket existence.
-	
-	If there are any other errors, please resolve them before continuing.
+	If there are any errors, please resolve them before continuing.
 
 6. Add this line to your CRON (change backups folder if necessary):
 
